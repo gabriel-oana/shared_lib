@@ -29,8 +29,8 @@ class S3:
                 body = self._client.get_object(Bucket=bucket_name, Key=object_name)["Body"].read().decode()
             return body
 
-        except ClientError as e:
-            traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        except ClientError as exception:
+            traceback_str = ''.join(traceback.format_tb(exception.__traceback__))
             self._logger.error(traceback_str)
             raise
 
@@ -45,8 +45,8 @@ class S3:
 
         try:
             self._client.put_object(Bucket=bucket_name, Key=object_name, Body=str(body).encode('utf-8'))
-        except ClientError as e:
-            traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        except ClientError as exception:
+            traceback_str = ''.join(traceback.format_tb(exception.__traceback__))
             self._logger.error(traceback_str)
             raise
 
@@ -59,8 +59,8 @@ class S3:
 
         try:
             self._client.delete_object(Bucket=bucket_name, Key=object_name)
-        except ClientError as e:
-            traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        except ClientError as exception:
+            traceback_str = ''.join(traceback.format_tb(exception.__traceback__))
             self._logger.error(traceback_str)
             raise
 
@@ -97,8 +97,8 @@ class S3:
             length = obj["ContentLength"]
             return self.__convert_int_to_str_format(length, str_format)
 
-        except ClientError as e:
-            traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        except ClientError as exception:
+            traceback_str = ''.join(traceback.format_tb(exception.__traceback__))
             self._logger.error(traceback_str)
             raise
 
@@ -185,8 +185,8 @@ class S3:
                 "Key": source_object
             }
             self._resource.meta.client.copy(copy_source, target_bucket, target_object)
-        except ClientError as e:
-            traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        except ClientError as exception:
+            traceback_str = ''.join(traceback.format_tb(exception.__traceback__))
             self._logger.error(traceback_str)
             raise
 
@@ -199,8 +199,8 @@ class S3:
         """
         try:
             self._resource.Bucket(bucket_name).download_file(object_name, path)
-        except Exception as e:
-            traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        except Exception as exception:
+            traceback_str = ''.join(traceback.format_tb(exception.__traceback__))
             self._logger.error(traceback_str)
             raise
 
@@ -213,7 +213,7 @@ class S3:
         """
         try:
             self._resource.Bucket(bucket_name).upload_file(path, object_name)
-        except Exception as e:
-            traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+        except Exception as exception:
+            traceback_str = ''.join(traceback.format_tb(exception.__traceback__))
             self._logger.error(traceback_str)
             raise

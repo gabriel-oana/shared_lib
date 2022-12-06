@@ -1,8 +1,4 @@
-import logging
-import re
-import boto3
-from botocore.exceptions import ClientError
-from shared_lib.aws.base import AWSBase
+from logger import AWSBase
 
 
 class S3(AWSBase):

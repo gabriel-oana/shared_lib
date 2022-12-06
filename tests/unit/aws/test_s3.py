@@ -111,6 +111,9 @@ class TestS3(unittest.TestCase):
         size = self.aws.s3.get_object_size(bucket_name=self.defaults.bucket_name, object_name=self.defaults.object_name)
         self.assertEqual(size, 0.0)
 
+    def test_get_object_size_raises(self):
+        self.assertRaises(ClientError, self.aws.s3.get_object_size, bucket_name="WRONG", object_name=self.defaults.object_name)
+
     def test_get_object_size_in_bytes(self):
         # Put an object there first directly using the boto3 client
         self.s3.put_object(Bucket=self.defaults.bucket_name, Key=self.defaults.object_name, Body='some-content')
@@ -130,6 +133,10 @@ class TestS3(unittest.TestCase):
         self.s3.put_object(Bucket=self.defaults.bucket_name, Key=self.defaults.object_name2, Body='some-content')
         size = self.aws.s3.get_objects_size(bucket_name=self.defaults.bucket_name, prefixes=["TEST"], str_format='B')
         self.assertEqual(size, 24.0)
+
+    def test_get_objects_size_raises_with_no_files(self):
+        self.assertRaises(RuntimeError, self.aws.s3.get_objects_size, bucket_name=self.defaults.bucket_name,
+                          prefixes=["TEST"], str_format='B')
 
     def test_get_matching_objects(self):
         # Put an object there first directly using the boto3 client

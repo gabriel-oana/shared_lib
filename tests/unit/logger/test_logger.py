@@ -135,3 +135,8 @@ class TestLogger(unittest.TestCase):
         value = stream.getvalue()
         text_contains = "Critical test" in value
         self.assertEqual(text_contains, True)
+
+    def test_attach_logger_raises_with_wrong_class(self):
+        class WrongClass:
+            pass
+        self.assertRaises(RuntimeError, Logger, loggers=[WrongClass])

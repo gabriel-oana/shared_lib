@@ -12,7 +12,3 @@ class AWS:
     @property
     def s3(self) -> S3:
         return S3(region=self.region, client=self.client, resource=self.resource, logger=self.logger)
-
-
-
-
