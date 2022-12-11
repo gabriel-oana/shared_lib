@@ -18,8 +18,7 @@ class BaseLogger(ABC):
 
     @staticmethod
     def default_format() -> str:
-        default_log_format = "%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s"
-        return default_log_format
+        return "%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s"
 
     @abstractmethod
     def make_handler(self, *args, **kwargs):

@@ -3,8 +3,10 @@ import time
 import socket
 import boto3
 
+from shared_lib.logger.loggers.base_logger import BaseLogger
 
-class CloudwatchLogs:
+
+class CloudwatchLogs(BaseLogger):
     """
     Logging module used to send log messages to AWS Cloudwatch Logs.
     The class has been created with the aim of it being implemented into processes that are distributed.
@@ -48,6 +50,14 @@ class CloudwatchLogs:
         self.__batched_messages = 0
         self.__sequence_token = None
         self.__base_event_log = self.__create_base_event_log()
+
+    def make_handler(self, *args, **kwargs):
+        """
+        Implementation from the inherited class that is not required.
+        As result the only thing it does it, it validates the log level.
+        """
+        self.validate_log_level(self._log_level)
+        return self
 
     def create_log_group(self, retention_days: int = 14, tags: dict = None, raise_if_exists: bool = True) -> None:
         """
@@ -271,3 +281,4 @@ class CloudwatchLogs:
         log_message = f"{log_level} - {message}"
         if self.__should_record_log(log_level):
             self._handler(log_message)
+

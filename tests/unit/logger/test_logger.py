@@ -3,11 +3,13 @@ import os
 import sys
 import glob
 import unittest
-
+import boto3
+from moto import mock_logs
 
 from shared_lib.logger import Logger
 from shared_lib.logger.loggers.file_logger import FileLogger
 from shared_lib.logger.loggers.stdout_logger import StdoutLogger
+from shared_lib.aws import AWS
 
 
 class TestLogger(unittest.TestCase):
@@ -140,3 +142,27 @@ class TestLogger(unittest.TestCase):
         class WrongClass:
             pass
         self.assertRaises(RuntimeError, Logger, loggers=[WrongClass])
+
+    @mock_logs
+    def test_integration_with_aws_cloudwatch(self):
+        client = boto3.client('logs', "eu-west-1")
+        aws = AWS(region="eu-west-1", client=client)
+        aws_logger = aws.logs(log_group_name="test-log-group", log_stream_name="test-log-stream", log_level='DEBUG')
+        aws_logger.create_log_group()
+        aws_logger.create_log_stream()
+        logger = Logger(
+            log_name='test-stdout-logger',
+            log_level='INFO',
+            loggers=[aws_logger]
+        )
+
+        logger.info('Info test')
+
+        # Check the logs to get the message
+        response = client.get_log_events(
+            logGroupName="test-log-group",
+            logStreamName="test-log-stream"
+        )
+
+        message = response["events"][0]["message"]
+        self.assertEqual("INFO - Info test" in message, True)

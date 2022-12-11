@@ -121,20 +121,6 @@ class TestCloudwatchLogs(unittest.TestCase):
         message = response["events"][0]["message"]
         self.assertEqual("INFO - Test" in message, True)
 
-    def test_log_warning_record_is_correct(self):
-        self.logs.create_log_group(retention_days=self.defaults.retention_days, tags=self.defaults.tags)
-        self.logs.create_log_stream()
-
-        self.logs.warning("Test")
-
-        response = self.client.get_log_events(
-            logGroupName=self.defaults.log_group_name,
-            logStreamName=self.defaults.log_stream_name
-        )
-
-        message = response["events"][0]["message"]
-        self.assertEqual("WARNING - Test" in message, True)
-
     def test_log_error_record_is_correct(self):
         self.logs.create_log_group(retention_days=self.defaults.retention_days, tags=self.defaults.tags)
         self.logs.create_log_stream()
@@ -290,3 +276,16 @@ class TestCloudwatchLogs(unittest.TestCase):
             use_batches=True
         )
         self.assertRaises(ValueError, logs.create_log_group, retention_days=4)
+
+    def test_raises_when_group_does_not_exist(self):
+        client = boto3.client('logs', self.defaults.region)
+        aws = AWS(region=self.defaults.region, client=client)
+        logs = aws.logs(
+            log_group_name=self.defaults.log_group_name,
+            log_stream_name=self.defaults.log_stream_name,
+            log_level="WRONG_LEVEL",
+            batch_size=5,
+            use_batches=True
+        )
+        self.assertRaises(ValueError, logs.info, message='test')
+
