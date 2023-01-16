@@ -35,8 +35,8 @@ class CloudwatchLogs(BaseLogger):
     This module can be used to create the log groups and streams as well as adding retention days and tags.
     """
 
-    def __init__(self, client, region: str, log_group_name: str, log_stream_name: str, log_level: str, use_batches: bool = False,
-                 batch_size: int = 25, max_attempts: int = 10, backoff_multiplier: int = 10):
+    def __init__(self, region: str, log_group_name: str, log_stream_name: str, log_level: str, use_batches: bool = False,
+                 batch_size: int = 25, max_attempts: int = 10, backoff_multiplier: int = 10, client=None):
         self._region = region
         self._client = client if client else boto3.client('logs', region_name=region)
         self._log_group_name = log_group_name
