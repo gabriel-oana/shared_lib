@@ -1,5 +1,7 @@
 # Shared Library
 
+<img src="img/unittest.svg"> <img src="img/coverage.svg"> <img src="img/pylint.svg"> <img src="img/python.svg"> <img src="img/release.svg">
+
 - [Shared Library](#shared-library)
     + [1. Description](#1-description)
     + [2. Installation](#2-installation)
@@ -310,6 +312,8 @@ logger.info('message')
 Pyspark factory creates a spark session in an "easier" manner which allows one to add more parameters dynamically. 
 The most important aspect of this class is not how to create a spark session but how to perform a unit-test on a 
 PySpark session. For reference please check the test available for PySpark.
+
+Full list of parameters: https://spark.apache.org/docs/latest/configuration.html
 
 ```python
 from shared_lib.spark.pyspark_factory import SparkFactory

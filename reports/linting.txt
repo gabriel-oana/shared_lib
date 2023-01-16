@@ -1,0 +1,12 @@
+************* Module shared_lib.aws.logs
+shared_lib/aws/logs.py:77:16: W0707: Consider explicitly re-raising using 'except Exception as exc' and 'raise RuntimeError('Cloudwatch log group already exists') from exc' (raise-missing-from)
+shared_lib/aws/logs.py:87:16: W0707: Consider explicitly re-raising using 'except Exception as exc' and 'raise RuntimeError('Cloudwatch log stream already exists') from exc' (raise-missing-from)
+shared_lib/aws/logs.py:148:19: W0703: Catching too general exception Exception (broad-except)
+shared_lib/aws/logs.py:150:20: W0707: Consider explicitly re-raising using 'raise ValueError(f'Max attempts reached - {str(exc)}') from exc' (raise-missing-from)
+shared_lib/aws/logs.py:175:8: R1703: The if statement can be replaced with 'return bool(test)' (simplifiable-if-statement)
+************* Module shared_lib.aws.s3
+shared_lib/aws/s3.py:142:8: R1702: Too many nested blocks (6/5) (too-many-nested-blocks)
+
+------------------------------------------------------------------
+Your code has been rated at 9.81/10 (previous run: 9.81/10, +0.00)
+
