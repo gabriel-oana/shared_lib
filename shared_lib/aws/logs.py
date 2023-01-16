@@ -226,7 +226,7 @@ class CloudwatchLogs(BaseLogger):
         if self._log_level.upper() not in level_lookup.keys():
             raise ValueError(f'Log level incorrect. Choose from {list(level_lookup.keys())}')
 
-        return True if level_lookup[log_level.upper()] >= level_lookup[self._log_level.upper()] else False
+        return level_lookup[log_level.upper()] >= level_lookup[self._log_level.upper()]
 
     def __add_retention(self, retention_days: int) -> None:
         """
