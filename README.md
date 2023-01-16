@@ -1,5 +1,22 @@
 # Shared Library
 
+- [Shared Library](#shared-library)
+    + [1. Description](#1-description)
+    + [2. Installation](#2-installation)
+    + [3. Contents](#3-contents)
+      - [3.1 AWS](#31-aws)
+        * [3.1.1 S3](#311-s3)
+      - [3.1.2 Cloudwatch Logs](#312-cloudwatch-logs)
+        * [Simple Usage](#simple-usage)
+        * [Distributed usage](#distributed-usage)
+      - [3.2 Logger](#32-logger)
+        * [3.2.1 Output to stdout](#321-output-to-stdout)
+        * [3.2.2 Output to file](#322-output-to-file)
+        * [3.2.3 Output to AWS Cloudwatch Logs](#323-output-to-aws-cloudwatch-logs)
+        * [3.2.4 Output to multiple places](#324-output-to-multiple-places)
+        * [3.2.5 Extending the logger class](#325-extending-the-logger-class)
+    + [3.3 PySpark](#33-pyspark)
+
 ### 1. Description
 The purpose of this library is to combine various parts of shared functionality that is used 
 across my personal projects.     
@@ -290,3 +307,35 @@ logger.info('message')
 
 
 ### 3.3 PySpark
+Pyspark factory creates a spark session in an "easier" manner which allows one to add more parameters dynamically. 
+The most important aspect of this class is not how to create a spark session but how to perform a unit-test on a 
+PySpark session. For reference please check the test available for PySpark.
+
+```python
+from shared_lib.spark.pyspark_factory import SparkFactory
+
+# Create spark session with specific parameters
+config = {
+    "spark.jars.packages": "org.apache.hadoop:hadoop-aws:3.2.2",
+    "spark.hadoop.fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.TemporaryAWSCredentialsProvider",
+    "spark.hadoop.fs.s3a.access.key": "dummy",
+    "spark.hadoop.fs.s3a.secret.key": "dummy",
+    "spark.hadoop.fs.s3a.session.token": "dummy",
+    "spark.hadoop.fs.s3a.endpoint": f"http://127.0.0.1:5000",
+}
+
+spark_factory = SparkFactory(
+    master="local[*]"
+)
+
+spark = spark_factory.create_session(
+    app_name='demo',
+    executor_memory='2g',
+    executor_cores=4,
+    default_parallelism=4,
+    total_executor_cores=16,
+    num_executors=4,
+    log_level='INFO',
+    extra_args=config
+)
+```
